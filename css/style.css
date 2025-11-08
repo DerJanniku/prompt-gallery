@@ -1,0 +1,272 @@
+:root {
+    --background-color-light: #f9f9f9;
+    --text-color-light: #222222;
+    --header-footer-bg-light: #ffffff;
+    --card-bg-light: #ffffff;
+    --card-border-light: #e0e0e0;
+    --tag-bg-light: #eeeeee;
+    --tag-text-light: #555555;
+    --button-bg-light: #e8e8e8;
+    --button-text-light: #000000;
+    --copy-button-bg-light: #007aff;
+    --copy-button-text-light: #ffffff;
+    --input-bg-light: #ffffff;
+    --input-border-light: #cccccc;
+
+    --background-color-dark: #121212;
+    --text-color-dark: #e0e0e0;
+    --header-footer-bg-dark: #1e1e1e;
+    --card-bg-dark: #1e1e1e;
+    --card-border-dark: #333333;
+    --tag-bg-dark: #333333;
+    --tag-text-dark: #bbbbbb;
+    --button-bg-dark: #3a3a3c;
+    --button-text-dark: #ffffff;
+    --copy-button-bg-dark: #0a84ff;
+    --copy-button-text-dark: #ffffff;
+    --input-bg-dark: #2c2c2e;
+    --input-border-dark: #444444;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.light-mode {
+    background-color: var(--background-color-light);
+    color: var(--text-color-light);
+}
+
+.dark-mode {
+    background-color: var(--background-color-dark);
+    color: var(--text-color-dark);
+}
+
+header, footer {
+    padding: 1rem 2rem;
+    transition: background-color 0.3s;
+}
+
+.light-mode header, .light-mode footer {
+    background-color: var(--header-footer-bg-light);
+}
+
+.dark-mode header, .dark-mode footer {
+    background-color: var(--header-footer-bg-dark);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--card-border-light);
+}
+
+.light-mode header {
+    border-bottom-color: var(--card-border-light);
+}
+
+.dark-mode header {
+    border-bottom-color: var(--card-border-dark);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+nav {
+    display: flex;
+    gap: 1rem;
+}
+
+#theme-toggle, #lang-toggle, #back-to-prompts, #copy-prompt, #add-prompt-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.light-mode #theme-toggle, .light-mode #lang-toggle, .light-mode #back-to-prompts, .light-mode #add-prompt-button {
+    background-color: var(--button-bg-light);
+    color: var(--button-text-light);
+}
+
+.dark-mode #theme-toggle, .dark-mode #lang-toggle, .dark-mode #back-to-prompts, .dark-mode #add-prompt-button {
+    background-color: var(--button-bg-dark);
+    color: var(--button-text-dark);
+}
+
+.light-mode #copy-prompt {
+    background-color: var(--copy-button-bg-light);
+    color: var(--copy-button-text-light);
+}
+
+.dark-mode #copy-prompt {
+    background-color: var(--copy-button-bg-dark);
+    color: var(--copy-button-text-dark);
+}
+
+main {
+    padding: 2rem;
+}
+
+footer {
+    text-align: center;
+    border-top: 1px solid var(--card-border-light);
+}
+
+.light-mode footer {
+    border-top-color: var(--card-border-light);
+}
+
+.dark-mode footer {
+    border-top-color: var(--card-border-dark);
+}
+
+.prompt-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.prompt-card {
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid;
+}
+
+.light-mode .prompt-card {
+    background-color: var(--card-bg-light);
+    border-color: var(--card-border-light);
+}
+
+.dark-mode .prompt-card {
+    background-color: var(--card-bg-dark);
+    border-color: var(--card-border-dark);
+}
+
+.prompt-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.dark-mode .prompt-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.prompt-card h3 {
+    margin-top: 0;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.light-mode .tag {
+    background-color: var(--tag-bg-light);
+    color: var(--tag-text-light);
+}
+
+.dark-mode .tag {
+    background-color: var(--tag-bg-dark);
+    color: var(--tag-text-dark);
+}
+
+.prompt-detail-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.prompt-description {
+    font-style: italic;
+    margin-bottom: 2rem;
+}
+
+.prompt-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 0.75rem;
+}
+
+.light-mode .prompt-form-container {
+    background-color: var(--card-bg-light);
+    border: 1px solid var(--card-border-light);
+}
+
+.dark-mode .prompt-form-container {
+    background-color: var(--card-bg-dark);
+    border: 1px solid var(--card-border-dark);
+}
+
+#new-prompt-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#new-prompt-form label {
+    font-weight: bold;
+}
+
+#new-prompt-form input,
+#new-prompt-form textarea {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.light-mode #new-prompt-form input,
+.light-mode #new-prompt-form textarea {
+    background-color: var(--input-bg-light);
+    border-color: var(--input-border-light);
+}
+
+.dark-mode #new-prompt-form input,
+.dark-mode #new-prompt-form textarea {
+    background-color: var(--input-bg-dark);
+    border-color: var(--input-border-dark);
+    color: var(--text-color-dark);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.form-actions button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.form-actions button[type="submit"] {
+    background-color: var(--copy-button-bg-light);
+    color: var(--copy-button-text-light);
+}
+
+.dark-mode .form-actions button[type="submit"] {
+    background-color: var(--copy-button-bg-dark);
+}
