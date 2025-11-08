@@ -1,8 +1,42 @@
 document.addEventListener('DOMContentLoaded', () => {
     const appContainer = document.getElementById('app-container');
     const themeToggleButton = document.getElementById('theme-toggle');
+    const langToggleButton = document.getElementById('lang-toggle');
+    const appTitle = document.getElementById('app-title');
+    const footerText = document.getElementById('footer-text');
     let prompts = [];
-    let currentTag = null;
+    let currentLang = 'en';
+
+    const translations = {
+        en: {
+            appTitle: "Prompt Gallery",
+            footerText: "Made by derjannik",
+            themeToggle: "Toggle Theme",
+            langToggle: "Deutsch",
+            promptsTitle: "All Prompts",
+            backToPrompts: "Back",
+            copy: "Copy",
+            copied: "Copied!"
+        },
+        de: {
+            appTitle: "Prompt Galerie",
+            footerText: "Erstellt von derjannik",
+            themeToggle: "Theme wechseln",
+            langToggle: "English",
+            promptsTitle: "Alle Prompts",
+            backToPrompts: "Zurück",
+            copy: "Kopieren",
+            copied: "Kopiert!"
+        }
+    };
+
+    const updateUIText = () => {
+        const t = translations[currentLang];
+        appTitle.textContent = t.appTitle;
+        footerText.textContent = t.footerText;
+        themeToggleButton.textContent = t.themeToggle;
+        langToggleButton.textContent = t.langToggle;
+    };
 
     const filePaths = [
         'public/prompt1.md',
@@ -28,7 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(newTheme);
     };
 
+    const toggleLang = () => {
+        currentLang = currentLang === 'en' ? 'de' : 'en';
+        updateUIText();
+        renderHomePage();
+    };
+
     themeToggleButton.addEventListener('click', toggleTheme);
+    langToggleButton.addEventListener('click', toggleLang);
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
@@ -78,43 +119,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const renderHomePage = () => {
-        currentTag = null;
-        const allTags = prompts.flatMap(prompt => prompt.tags);
-        const uniqueTags = [...new Set(allTags)].sort();
-
-        let tagsHtml = '<h2>Tags</h2><div class="tags-container">';
-        uniqueTags.forEach(tag => {
-            tagsHtml += `<button class="tag-button" data-tag="${tag}">${tag}</button>`;
+        const t = translations[currentLang];
+        let promptsHtml = `<h2>${t.promptsTitle}</h2>`;
+        promptsHtml += '<div class="prompt-grid">';
+        prompts.forEach(prompt => {
+            promptsHtml += `
+                <div class="prompt-card" data-path="${prompt.filePath}">
+                    <h3>${prompt.title}</h3>
+                    <p>${prompt.description}</p>
+                    <div class="tags-container">
+                        ${prompt.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
         });
-        tagsHtml += '</div>';
-        appContainer.innerHTML = tagsHtml;
-
-        document.querySelectorAll('.tag-button').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const selectedTag = e.target.dataset.tag;
-                renderFilterView(selectedTag);
-            });
-        });
-    };
-
-    const renderFilterView = (tag) => {
-        currentTag = tag;
-        const filteredPrompts = prompts.filter(prompt => prompt.tags.includes(tag));
-
-        let promptsHtml = `<h2>Prompts tagged with "${tag}"</h2>`;
-        promptsHtml += `<button id="back-to-tags">Back to Tags</button>`;
-        promptsHtml += '<ul class="prompt-list">';
-        filteredPrompts.forEach(prompt => {
-            promptsHtml += `<li class="prompt-item" data-path="${prompt.filePath}">${prompt.title}</li>`;
-        });
-        promptsHtml += '</ul>';
+        promptsHtml += '</div>';
         appContainer.innerHTML = promptsHtml;
 
-        document.getElementById('back-to-tags').addEventListener('click', renderHomePage);
-
-        document.querySelectorAll('.prompt-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const filePath = e.target.dataset.path;
+        document.querySelectorAll('.prompt-card').forEach(card => {
+            card.addEventListener('click', (e) => {
+                const filePath = e.currentTarget.dataset.path;
                 renderDetailView(filePath);
             });
         });
@@ -122,38 +146,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderDetailView = (filePath) => {
         const prompt = prompts.find(p => p.filePath === filePath);
+        const t = translations[currentLang];
 
         let detailHtml = `
             <div class="prompt-detail-header">
-                <button id="back-to-prompts">Back</button>
-                <button id="copy-prompt">Copy</button>
+                <button id="back-to-prompts">${t.backToPrompts}</button>
+                <button id="copy-prompt">${t.copy}</button>
             </div>
             <div class="prompt-content">
                 <h2>${prompt.title}</h2>
                 <p class="prompt-description">${prompt.description}</p>
+                <div class="tags-container">
+                    ${prompt.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                </div>
                 <div class="prompt-body">${parseMarkdown(prompt.content)}</div>
             </div>
         `;
         appContainer.innerHTML = detailHtml;
 
-        document.getElementById('back-to-prompts').addEventListener('click', () => {
-            if (currentTag) {
-                renderFilterView(currentTag);
-            } else {
-                renderHomePage();
-            }
-        });
+        document.getElementById('back-to-prompts').addEventListener('click', renderHomePage);
 
         const copyButton = document.getElementById('copy-prompt');
         copyButton.addEventListener('click', () => {
             navigator.clipboard.writeText(prompt.content).then(() => {
-                copyButton.textContent = 'Copied!';
+                copyButton.textContent = t.copied;
                 setTimeout(() => {
-                    copyButton.textContent = 'Copy';
+                    copyButton.textContent = t.copy;
                 }, 2000);
             });
         });
     };
-
+    updateUIText();
     fetchMarkdownFiles();
 });
